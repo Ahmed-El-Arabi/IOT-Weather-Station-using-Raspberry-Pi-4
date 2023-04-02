@@ -1,0 +1,56 @@
+import urllib.request
+import requests
+import threading
+import json
+import random
+import RPi.GPIO as GPIO
+import time
+import smtplib
+from time import sleep
+from gpiozero import Buzzer, InputDevice
+server =smtplib.SMTP_SSL("smtp.gmail.com",465)
+server.login("mariam.m.maher.18@gmail.com","mariammagdy18")
+GPIO.setwarnings(False)
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(18,GPIO.IN)
+
+
+
+buzz    = Buzzer(13)
+no_rain = InputDevice(18)
+rain = True
+
+def buzz_now(iterations):
+    for x in range(iterations):
+        buzz.on()
+        sleep(0.1)
+        buzz.off()
+        sleep(0.1)
+
+
+def thingspeak_post():
+    threading.Timer(15,thingspeak_post).start()
+    URl='https://api.thingspeak.com/update?api_key='
+    KEY='SRV8DX5KJDI268CH'
+    HEADER='&field3={}'.format(rain)
+    NEW_URL = URl+KEY+HEADER
+    print(NEW_URL)
+    data=urllib.request.urlopen(NEW_URL)
+    print(data)
+
+while True:
+    if not no_rain.is_active:
+        print("It's raining - Take an umbrella")
+        buzz_now(5)
+        rain = 1
+        server.sendmail("mariam.m.maher.18@gmail.com","ahmedelarabi935@gmail.com","It's raining")
+        time.sleep(2)
+        thingspeak_post()
+        server.quit()
+        # insert your other code or functions here
+        # e.g. tweet, SMS, email, take a photo etc.
+    elif no_rain.is_active:
+        rain = 0
+        print("The weather's clear")
+        thingspeak_post()
+    sleep(1)

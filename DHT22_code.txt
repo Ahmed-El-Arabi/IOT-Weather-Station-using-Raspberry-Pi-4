@@ -1,0 +1,48 @@
+import time
+import board
+import adafruit_dht
+import psutil
+import urllib.request
+import requests
+import threading
+import json
+import random
+import smtplib
+
+server =smtplib.SMTP_SSL("smtp.gmail.com",465)
+server.login("mariam.m.maher.18@gmail.com","mariammagdy18")
+
+# We first check if a libgpiod process is running. If yes, we kill it!
+for proc in psutil.process_iter():
+    if proc.name() == 'libgpiod_pulsein' or proc.name() == 'libgpiod_pulsei':
+        proc.kill()
+        
+sensor = adafruit_dht.DHT22(board.D4)
+
+def thingspeak_post():
+    threading.Timer(15,thingspeak_post).start()
+    URl='https://api.thingspeak.com/update?api_key='
+    KEY='SRV8DX5KJDI268CH'
+    HEADER='&field1={}&field2={}'.format(temp, humidity)
+    NEW_URL = URl+KEY+HEADER
+    print(NEW_URL)
+    data=urllib.request.urlopen(NEW_URL)
+    print(data)
+
+while True:
+    try:
+        temp = sensor.temperature
+        humidity = sensor.humidity
+        print("Temperature: {}*C   Humidity: {}% ".format(temp, humidity))
+        thingspeak_post()
+        server.sendmail("mariam.m.maher.18@gmail.com","ahmedelarabi935@gmail.com",str(temp)+"*C  (Temperature)    "+str(humidity)+"%   (Humidity)")
+        server.quit()
+    except RuntimeError as error:
+        print(error.args[0])
+        time.sleep(2.0)
+        continue
+    except Exception as error:
+        sensor.exit()
+        raise error
+
+    time.sleep(2.0)
