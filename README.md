@@ -73,4 +73,18 @@ This passage explains the SMTP protocol, which is used by mail servers to send, 
 ![image](https://user-images.githubusercontent.com/96639538/229325212-ef9e4075-4747-4204-8cd0-46f5a5de7bb0.png)
 
 
+## Visualizations of actual live data sent successfully using our 2 communication protocols:
+
+![Data sent to our channel on the website](https://user-images.githubusercontent.com/96639538/229325278-877b3019-b83b-484e-8676-f5d6e2f0f254.png)
+
+![Accessing the channel on mobile App](https://user-images.githubusercontent.com/96639538/229325282-81f95b59-a1c8-4ecd-ac9c-e531e2654984.png)
+
+## These are the acknowledgment emails for both sensors
+
+Note: The email of my teammate was the one used at the time
+
+![image](https://user-images.githubusercontent.com/96639538/229325346-5c308c79-6003-4536-b50e-e6d1fbc8152d.png)
+
+![image](https://user-images.githubusercontent.com/96639538/229325347-6b40be6a-9a7c-45c5-a434-a0fdbd533c77.png)
+
 
